@@ -1,0 +1,14 @@
+# DATABASE
+spring:
+  profiles:
+    active: dev
+  datasource:
+    driverClassName: org.mariadb.jdbc.Driver
+    username: root
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create
+  output:
+    ansi:
+      enabled: always
