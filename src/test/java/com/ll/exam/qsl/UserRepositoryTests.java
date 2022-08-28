@@ -6,12 +6,18 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
+@Transactional
+@ActiveProfiles("test")
 class UserRepositoryTests {
     @Autowired
     private UserRepository userRepository;
@@ -56,5 +62,22 @@ class UserRepositoryTests {
         assertThat(u2.getUsername()).isEqualTo("user2");
         assertThat(u2.getEmail()).isEqualTo("user2@test.com");
         assertThat(u2.getPassword()).isEqualTo("{noop}1234");
+    }
+
+    @Test
+    @DisplayName("사랑이라는 키워드에 해당하는 회원들 조회")
+    @Rollback(false)
+    void t4() {
+        List<SiteUser> users = userRepository.findUserByKeyword("사랑");
+        System.out.println(users);
+    }
+
+    @Test
+    @DisplayName("사랑이라는 키워드를 한번 더 넣기")
+    @Rollback(false)
+    void t5() {
+        SiteUser u1 = userRepository.getQslUser(1L);
+
+        u1.addKeyword("사랑");
     }
 }
